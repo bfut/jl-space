@@ -1,0 +1,22 @@
+# https://github.com/jupyterhub/repo2docker-action
+
+name: Build, deploy to Docker Hub
+on:
+  workflow_dispatch:
+
+jobs:
+  binder:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: update jupyter dependencies with repo2docker
+      uses: jupyterhub/repo2docker-action@master
+      with:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        # BINDER_CACHE: true  # setting any value will have a bot overwrite ./binder/Dockerfile
+        PUBLIC_REGISTRY_CHECK: true
